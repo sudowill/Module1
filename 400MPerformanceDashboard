@@ -1,0 +1,50 @@
+race_times = []
+
+def add_time():
+    time = input("Enter your 400m time: ")
+    if time.replace(".", "").isdigit():
+        race_times.append(float(time))
+        print("Time added.\n")
+    else:
+        print("Invalid time.\n")
+
+def show_stats():
+    if len(race_times) == 0:
+        print("No times yet.\n")
+        return
+
+    fastest = min(race_times)
+    slowest = max(race_times)
+    average = sum(race_times) / len(race_times)
+
+    print(f"Fastest: {fastest}")
+    print(f"Slowest: {slowest}")
+    print(f"Average: {average}\n")
+
+def clear_times():
+    race_times.clear()
+    print("All times erased.\n")
+
+def menu():
+    while True:
+        print("TRACK PERFORMANCE")
+        print("1. Add time")
+        print("2. Show stats")
+        print("3. Clear all times")
+        print("4. Exit")
+
+        choice = input("Choose: ")
+
+        if choice == "1":
+            add_time()
+        elif choice == "2":
+            show_stats()
+        elif choice == "3":
+            clear_times()
+        elif choice == "4":
+            print("Good luck this season!")
+            break
+        else:
+            print("Invalid choice.\n")
+
+menu()
