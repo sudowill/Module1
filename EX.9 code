@@ -1,0 +1,306 @@
+# Splitter Cipher - ENCRYPTOR
+
+# Ask for a phrase
+plaintext = input("Enter a phrase to encrypt: ")
+
+length = len(plaintext)
+
+# Validate phrase length
+if length < 2:
+    print("Phrase must be at least 2 characters long.")
+    exit()
+
+# Ask for split position
+prompt = (
+    f"After how many characters should the split happen?\n"
+    f"Enter a number between 1 and {length - 1}: "
+)
+
+while True:
+    try:
+        splitter = int(input(prompt))
+        if 1 <= splitter <= length - 1:
+            break
+        else:
+            print(f"Please enter a number between 1 and {length - 1}.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+# Perform encryption
+ciphertext = plaintext[splitter:] + plaintext[:splitter]
+
+print("\nEncrypted phrase:")
+print(ciphertext)
+
+
+# Splitter Cipher - DECRYPTOR
+
+ciphertext = input("Enter the ciphertext to decrypt: ")
+
+length = len(ciphertext)
+
+if length < 2:
+    print("Ciphertext must be at least 2 characters long.")
+    exit()
+
+prompt = (
+    f"How many characters were used for the split?\n"
+    f"Enter a number between 1 and {length - 1}: "
+)
+
+while True:
+    try:
+        splitter = int(input(prompt))
+        if 1 <= splitter <= length - 1:
+            break
+        else:
+            print(f"Please enter a number between 1 and {length - 1}.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+# Reverse the transposition
+plaintext = ciphertext[-splitter:] + ciphertext[:-splitter]
+
+print("\nDecrypted phrase:")
+print(plaintext)
+
+# Will Wright - Swapper Encryptor
+
+plaintext = input("Enter a phrase to encrypt (Swapper Method): ")
+
+length = len(plaintext)
+
+# Prepare ciphertext list with empty slots
+ciphertext = [None] * length
+positions = []
+
+print("\n--- Character Placement ---")
+print("You will choose where each character goes in the encrypted message.\n")
+
+for character in plaintext:
+    # Find open positions
+    open_slots = [i for i, x in enumerate(ciphertext) if x is None]
+    valid_choice = False
+
+    while not valid_choice:
+        print(f"Available positions: {open_slots}")
+        try:
+            new_position = int(input(f"Where should '{character}' go? Enter a position: "))
+            if new_position in open_slots:
+                ciphertext[new_position] = character
+                positions.append(new_position)
+                valid_choice = True
+            else:
+                print("Invalid choice — pick one of the open positions.\n")
+        except ValueError:
+            print("Please enter a valid number.\n")
+
+# Convert list to string
+ciphertext = ''.join(ciphertext)
+
+print("\n--- Encryption Complete ---")
+print(f"Original character positions (in order): {positions}")
+print(f"Ciphertext: {ciphertext}")
+
+# Will Wright - Splitter Decryptor
+ciphertext = input("Enter the ciphertext to decrypt (Splitter Method): ")
+
+length = len(ciphertext)
+
+if length < 2:
+    print("Ciphertext must be at least 2 characters long.")
+    exit()
+
+prompt = (
+    f"How many characters were used for the split?\n"
+    f"Enter a number between 1 and {length - 1}: "
+)
+
+# Validate input
+while True:
+    try:
+        splitter = int(input(prompt))
+        if 1 <= splitter <= length - 1:
+            break
+        else:
+            print(f"Please enter a number between 1 and {length - 1}.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+# Reverse the transposition
+plaintext = ciphertext[-splitter:] + ciphertext[:-splitter]
+
+print("\n--- Decryption Complete ---")
+print(f"Recovered plaintext: {plaintext}")
+
+# Will Wright - URL-safe Link Generator
+import secrets
+import string
+
+def generate_token(length: int = 12) -> str:
+    """Generate a URL-safe token of given length."""
+    alphabet = string.ascii_letters + string.digits  # URL-safe characters
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+def main():
+    base_url = "https://teameffort.work/"
+    extension = ".png"   # You can change this to anything you want
+
+    num_links = 100
+    token_length = 12    # Length of random part
+
+    print(f"Generating {num_links} URL-safe links:\n")
+
+    for _ in range(num_links):
+        token = generate_token(token_length)
+        link = f"{base_url}{token}{extension}"
+        print(link)
+
+if __name__ == "__main__":
+    main()
+
+# Will Wright - SHA256 File Verification
+import hashlib
+
+def sha256_of_file(filename):
+    """Return SHA256 hash of a file in hex format."""
+    sha256 = hashlib.sha256()
+    try:
+        with open(filename, "rb") as f:
+            for block in iter(lambda: f.read(4096), b""):
+                sha256.update(block)
+        return sha256.hexdigest()
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+        return None
+
+# Read expected hash from hash.txt
+try:
+    expected_hash = open("test_files/hash.txt", "r").read().strip()
+except FileNotFoundError:
+    print("Error: hash.txt not found.")
+    exit()
+
+print("\nExpected SHA256 hash:")
+print(expected_hash)
+print("-----------------------------------------")
+
+# Ask user for file to check
+filename = input("Enter the filename you want to verify: ")
+
+# Compute hash of the file
+file_hash = sha256_of_file(filename)
+
+if file_hash is None:
+    exit()
+
+print("\nComputed SHA256 hash:")
+print(file_hash)
+print("-----------------------------------------")
+
+# Compare hashes
+if file_hash == expected_hash:
+    print("RESULT: TRUE POSITIVE — The file matches the hash!")
+else:
+    print("RESULT: TRUE NEGATIVE — The file does NOT match the hash.")
+
+    import hashlib
+
+filename = "testfile.txt"  # file MUST be in same folder
+
+with open(filename, "rb") as f:
+    file_hash = hashlib.sha256(f.read()).hexdigest()
+
+print("SHA256 hash for", filename)
+print(file_hash)
+
+import hashlib
+
+filename = "testfile.txt"   # file MUST be in same folder
+
+with open(filename, "rb") as f:
+    file_hash = hashlib.sha256(f.read()).hexdigest()
+
+print("SHA256 hash for", filename)
+print(file_hash)
+
+
+# Will Wright - SHA256 File Comparison
+import hashlib
+
+def sha256_of_file(filename):
+    """Return SHA256 hash of a file in hex format."""
+    sha256 = hashlib.sha256()
+    try:
+        with open(filename, "rb") as f:
+            for block in iter(lambda: f.read(4096), b""):
+                sha256.update(block)
+        return sha256.hexdigest()
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+        return None
+
+print("\n--- SHA256 File Comparison Tool ---")
+
+file1 = input("Enter the FIRST filename: ")
+file2 = input("Enter the SECOND filename: ")
+
+hash1 = sha256_of_file(file1)
+hash2 = sha256_of_file(file2)
+
+if hash1 is None or hash2 is None:
+    exit()
+
+print("\nHash of first file:")
+print(hash1)
+print("\nHash of second file:")
+print(hash2)
+print("-----------------------------------------")
+
+if hash1 == hash2:
+    print("RESULT: TRUE POSITIVE — The files have the SAME SHA256 hash!")
+else:
+    print("RESULT: TRUE NEGATIVE — The files do NOT have the same hash.")
+
+    # Will Wright - Custom Password Generator
+import string
+import secrets
+import random
+
+# Character pools
+UPPER = string.ascii_uppercase
+LOWER = string.ascii_lowercase
+DIGITS = string.digits
+SPECIAL = string.punctuation
+
+print("\n--- Custom Secure Password Generator ---")
+
+# Get user choices
+num_upper = int(input("How many UPPERCASE letters?: "))
+num_lower = int(input("How many lowercase letters?: "))
+num_digits = int(input("How many digits?: "))
+num_special = int(input("How many special characters?: "))
+
+password_chars = []
+
+# Add chosen characters
+for _ in range(num_upper):
+    password_chars.append(secrets.choice(UPPER))
+
+for _ in range(num_lower):
+    password_chars.append(secrets.choice(LOWER))
+
+for _ in range(num_digits):
+    password_chars.append(secrets.choice(DIGITS))
+
+for _ in range(num_special):
+    password_chars.append(secrets.choice(SPECIAL))
+
+# Securely shuffle the final password
+random.SystemRandom().shuffle(password_chars)
+
+# Convert list to string
+password = ''.join(password_chars)
+
+print("\nYour secure password:")
+print(password)
